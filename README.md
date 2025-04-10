@@ -1,0 +1,1 @@
+Kniksi AMJNAN INSAN.
