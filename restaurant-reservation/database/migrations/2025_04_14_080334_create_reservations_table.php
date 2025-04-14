@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('number_of_people');
             $table->string('status')->default('en_attente');
             $table->text('comments')->nullable();
-            $table->text('order_pre_dishes')->nullable(); // ila bgha yakl xi 7aja khfifa 9bl maywjd lplat dialo !
+            $table->text('order_pre_dishes')->nullable(); // ila bgha yakl xi 7aja khfifa 9bl maywjd lplat dialo ! ou n9adro ndirohoum suggetion f .json
             $table->timestamps();
         });
     }
