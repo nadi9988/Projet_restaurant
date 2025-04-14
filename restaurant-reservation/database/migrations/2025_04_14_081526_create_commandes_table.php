@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
-            $table->dateTime('date_heure');
-            $table->string('statut')->default('en_preparation');
-            $table->decimal('montant_total', 10, 2);
-            $table->string('mode_paiement')->nullable();
-            $table->string('adresse_livraison')->nullable();
-            $table->boolean('est_livraison')->default(false);
+            $table->dateTime('date_time');
+            $table->string('status')->default('en_preparation');
+            $table->decimal('total_amount', 10, 2);
+            $table->string('payment_mode')->nullable();
+            $table->string('delivery_address')->nullable();
+            $table->boolean('is_delivery')->default(false);
             $table->foreignId('reservation_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
