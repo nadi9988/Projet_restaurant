@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('plat_id')->constrained()->onDelete('cascade');
             $table->foreignId('ingredient_id')->constrained()->onDelete('cascade');
+            $table->decimal('quantity', 8, 2)->nullable();
+            $table->string('unit')->nullable();
             $table->timestamps();
         });
     }
