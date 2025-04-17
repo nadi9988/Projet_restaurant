@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('horaires', function (Blueprint $table) {
             $table->id();
             $table->foreignId('restaurant_id')->constrained()->onDelete('cascade');
-            $table->json('opening_time'); // Format JSON pour stocker les heures d'ouver
-            $table->json('exceptional_days')->nullable(); // Jours fermés exceptionnelle
+            $table->json('opening_time'); // Format JSON pour stocker les heures d'ouver sma3ti a kniksi
+            $table->json('exceptional_days')->nullable(); // Jours fermés exceptionnelle nsdo nhar joumou3a nmxiw nssliw
             $table->timestamps();
         });
     }

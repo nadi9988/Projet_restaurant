@@ -27,7 +27,7 @@ class Users extends Model
     ];
     
     protected $casts = [
-        'InscriptionDate' => 'datatime',
+        'InscriptionDate' => 'datetime',
         'isActive' => 'boolean'
     ];
     // LinK Users with Client and Adminitrator(cardinalité)
