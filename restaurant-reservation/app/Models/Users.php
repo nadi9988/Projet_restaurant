@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use APP\Models\Client;
-use APP\Models\Administrator;
+use App\Models\Client;
+use App\Models\Administrator;
+
 
 class Users extends Model
 {
@@ -40,7 +41,7 @@ class Users extends Model
 
     public function admin()
     {
-        return $this->hasOne(Administrator::class);
+        return $this->hasOne(Administrators::class);
     }
 
     // is Admin or Client
