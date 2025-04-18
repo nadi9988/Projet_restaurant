@@ -36,7 +36,7 @@ class Users extends Model
 
     public function client() 
     {
-        return $this->hasOne(Clients::class); // relation 1-1
+        return $this->hasOne(Client::class); // relation 1-1
     }
 
     public function admin()

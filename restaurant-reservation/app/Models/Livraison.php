@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LigneCommande extends Model
+class Livraison extends Model
 {
-
-    // Method Soon . . . 
+    //
 }

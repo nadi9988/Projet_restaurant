@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Reservation;
 
-class Clients extends Model
+class Client extends Model
 {
     protected $fillable = [
         'user_id',
@@ -15,7 +16,7 @@ class Clients extends Model
         return $this->belongsTo(Users::class);
     }
 
-    public function reservations() {
+    public function reservation() {
         return $this->hasMany(Reservation::class);
     }
 
