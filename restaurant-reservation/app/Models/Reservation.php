@@ -8,6 +8,7 @@ class Reservation extends Model
 {
     protected $fillable = [
         'client_id',
+        'restaurant_id',
         'table_id',
         'date_time',
         'number_of_people',
@@ -25,10 +26,16 @@ class Reservation extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
     public function table()
     {
         return $this->belongsTo(Table::class);
     }
+
     public function commande()
     {
         return $this->hasOne(Commande::class);
