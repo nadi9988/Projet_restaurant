@@ -28,14 +28,5 @@ Route::get('/Admin', function () {
     return view ('Admin');
 });
 
-use App\Http\Controllers\AuthController;
 
-// Authentification
-Route::controller(AuthController::class)->group(function() {
-    Route::get('/login', 'showLoginForm')->name('login');
-    Route::post('/login', 'login');
-    Route::get('/register', 'showRegistrationForm')->name('register');
-    Route::post('/register', 'register');
-    Route::post('/logout', 'logout')->name('logout');
-});
 
