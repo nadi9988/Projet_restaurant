@@ -31,6 +31,3 @@ Route::get('/Reservation', function () {
 Route::get('/Admin', function () {
     return view ('Admin');
 });
-Route::get('/test', function () {
-    return view ('test');
-});
