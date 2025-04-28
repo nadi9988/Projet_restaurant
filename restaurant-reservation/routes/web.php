@@ -1,33 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController; 
 
-
-
-
-
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-
-Route::get('/register', function () {
-    return view ('Auth/register');
-});
-Route::get('/login', function () {
-    return view ('Auth/login');
-});
-Route::get('/Accueil', function () {
-    return view ('Accueil');
-});
-Route::get('/Restaurant', function () {
-    return view ('Restaurant');
-});
-Route::get('/Compte', function () {
-    return view ('Compte');
-});
-Route::get('/Reservation', function () {
-    return view ('Reservation');
-});
-Route::get('/Admin', function () {
-    return view ('Admin');
-});
+Route::get('/welcome', [PageController::class, 'welcome']);
+Route::get('/register', [PageController::class, 'register']);
+Route::get('/login', [PageController::class, 'login']);
+Route::get('/Accueil', [PageController::class, 'accueil']);
+Route::get('/Restaurant', [PageController::class, 'restaurant']);
+Route::get('/Compte', [PageController::class, 'compte']);
+Route::get('/Reservation', [PageController::class, 'reservation']);
+Route::get('/Admin', [PageController::class, 'admin']);
