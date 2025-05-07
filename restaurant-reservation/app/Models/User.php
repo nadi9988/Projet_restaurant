@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Client;
-use App\Models\Administrator;
+use App\Models\Admin;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
-class Users extends Model
+class User extends Authenticatable // <-- Hérite d'Authenticatable
 {
 
     protected $fillable = [
@@ -30,10 +31,7 @@ class Users extends Model
         'InscriptionDate' => 'datetime',
         'isActive' => 'boolean'
     ];
-    // LinK Users with Client and Adminitrator(cardinalité)
-    // la79ax ila mxiti l diagrame gha tl9a ghi houma li las9in fiha
-    // sma3ti a Kniksi !
-
+ 
     public function client() 
     {
         return $this->hasOne(Client::class); // relation 1-1
@@ -41,7 +39,7 @@ class Users extends Model
 
     public function admin()
     {
-        return $this->hasOne(Administrators::class);
+        return $this->hasOne(Admin::class);
     }
 
     // is Admin or Client

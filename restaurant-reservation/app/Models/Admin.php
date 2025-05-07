@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Administrators extends Model
+class Admin extends Model
 {
     protected $fillable = [
         'user_id',
@@ -12,7 +12,7 @@ class Administrators extends Model
     ];
 
     public function user () {
-        return $this->belongsTo(Users::class);
+        return $this->belongsTo(User::class);
     }
     // Method Soon . . .
 }
