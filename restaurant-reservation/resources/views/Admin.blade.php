@@ -772,8 +772,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="#restaurants" class="nav-link">
+                    <i class="fas fa-store"></i>
+                    <span>Restaurants</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="#menu-categories" class="nav-link">
-                    <i class="fas fa-list"></i>
+                    <i class="fas fa-layer-group"></i>
                     <span>Catégories</span>
                 </a>
             </li>
@@ -892,11 +898,56 @@
             </div>
         </div>
 
+        <!-- Restaurants Section -->
+<div id="restaurants" class="admin-section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-store"></i>
+            Gestion des restaurants
+        </h2>
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="add-restaurant">
+                <i class="fas fa-plus"></i> Ajouter
+            </button>
+        </div>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Téléphone</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>La Belle Table</td>
+                <td>12 Rue de Paris</td>
+                <td>01 23 45 67 89</td>
+                <td><span class="badge badge-success">Actif</span></td>
+                <td class="table-actions">
+                    <button class="table-btn" title="Éditer">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="table-btn" title="Supprimer">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+   
         <!-- Menu Categories Section -->
         <div id="menu-categories" class="admin-section">
             <div class="section-header">
                 <h2 class="section-title">
-                    <i class="fas fa-list"></i>
+                    <i class="fas fa-layer-group"></i>
                     Catégories de menu
                 </h2>
                 <div class="action-buttons">
@@ -1683,6 +1734,49 @@
 
     <!-- Modals -->
     <!-- Modal Ajout/Modification Catégorie -->
+
+    <div id="restaurant-modal" class="modal">
+            <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 class="modal-title">
+                <i class="fas fa-store"></i>
+                    Nouveau Restaurant
+            </h3>
+        
+            <form id="restaurant-form">
+                <div class="form-group">
+                    <label>Nom du restaurant</label>
+                    <input type="text" required>
+                </div>
+            
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Adresse</label>
+                        <input type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" required>
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea rows="3"></textarea>
+                </div>
+            
+                <div class="form-group">
+                    <label>Galerie photos</label>
+                    <input type="file" multiple accept="image/*">
+                    <div class="gallery-grid" id="gallery-preview"></div>
+                 </div>
+            
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </form>
+        </div>
+    </div>
     <div id="category-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -1820,19 +1914,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Gestion des modals
+            // Mise à jour des modals et boutons
             const modals = {
                 category: document.getElementById('category-modal'),
                 plat: document.getElementById('plat-modal'),
-                exception: document.getElementById('exception-modal')
+                exception: document.getElementById('exception-modal'),
+                restaurant: document.getElementById('restaurant-modal') // Ajouté
             };
             
             const openButtons = {
                 category: document.getElementById('add-category'),
                 plat: document.getElementById('add-plat'),
-                exception: document.getElementById('add-exception')
+                exception: document.getElementById('add-exception'),
+                restaurant: document.getElementById('add-restaurant') // Ajouté
             };
             
+            // Le reste du JavaScript reste identique
             const closeButtons = document.querySelectorAll('.close');
             
             // Ouvrir les modals
