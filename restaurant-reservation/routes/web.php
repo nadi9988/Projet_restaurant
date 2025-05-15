@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController; 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\MenuCategorieController;
 use App\Http\Controllers\Admin\PlatController;
@@ -26,16 +27,7 @@ Route::controller(AuthController::class)->group(function() {
 });
 
 
-Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
-    Route::resource('restaurants', RestaurantController::class);
-    Route::resource('menucategories', MenuCategorieController::class);
-    Route::resource('plats', PlatController::class);
-    Route::resource('horaires', HoraireController::class);
-    Route::resource('tables', TableController::class);
-    Route::resource('commandes', CommandeController::class);
-    Route::resource('livraisons', LivraisonController::class);
-    Route::resource('livreurs', LivreurController::class);
-
-});
-
-
+/* Admin routes */
+Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
+Route::get('/admin/restaurant', [App\Http\Controllers\AdminController::class, 'restaurant'])->name('restaurant.index');
+Route::delete('/admin/restaurant/{id}', [App\Http\Controllers\AdminController::class, 'deleteLaureat'])->name('delete.restaurant');
