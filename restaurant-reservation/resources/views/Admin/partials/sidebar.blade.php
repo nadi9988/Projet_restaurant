@@ -6,13 +6,6 @@
     </div>
     
     <ul class="nav-menu">
-
-        <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="nav-link active">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Tableau de bord</span>
-            </a>
-        </li>
         <li class="nav-item">
             <a href="{{ route('admin.restaurants.index') }}" class="nav-link {{ request()->routeIs('admin.restaurants.*') ? 'active' : '' }}">
                 <i class="fas fa-store"></i>

@@ -12,11 +12,28 @@ class Livreur extends Model
         'firstName',
         'phoneNumber',
         'is_available',
+        'etat',
     ];
 
     protected $casts = [
         'is_available' => 'boolean',
     ];
+
+    // Scopes
+    public function scopeActifs($query)
+    {
+        return $query->where('etat', 'actif');
+    }
+
+    public function scopeDisponible($query)
+    {
+        return $query->where('is_available', true);
+    }
+
+    public function scopeOccupe($query)
+    {
+        return $query->where('is_available', false);
+    }
 
     // Relations
     public function livraisons()
@@ -24,7 +41,7 @@ class Livreur extends Model
         return $this->hasMany(Livraison::class);
     }
 
-    // Accesseurs (Getters)
+    // Accessors
     public function getFullNameAttribute()
     {
         return Str::title($this->firstName . ' ' . $this->lastName);
@@ -40,7 +57,7 @@ class Livreur extends Model
         return $this->is_available ? 'Disponible' : 'Occupé';
     }
 
-    // Mutateurs (Setters)
+    // Mutators
     public function setFirstNameAttribute($value)
     {
         $this->attributes['firstName'] = trim(Str::title($value));
@@ -56,18 +73,23 @@ class Livreur extends Model
         $this->attributes['phoneNumber'] = preg_replace('/[^0-9]/', '', $value);
     }
 
-    // Méthodes utilitaires
-    public function isAvailable()
+    // Utility methods
+    public function estDisponible(): bool
     {
-        return $this->is_available;
+        return (bool) $this->is_available;
     }
 
-    public function livraisonsCount()
+    public function estOccupe(): bool
+    {
+        return !$this->is_available;
+    }
+
+    public function livraisonsCount(): int
     {
         return $this->livraisons()->count();
     }
 
-    public function isBusy()
+    public function aLivraisonsEnCours(): bool
     {
         return $this->livraisons()->where('status', '!=', 'livrée')->exists();
     }
@@ -75,22 +97,5 @@ class Livreur extends Model
     public function getLatestLivraison()
     {
         return $this->livraisons()->latest()->first();
-    }
-
-    // Scopes
-    public function scopeAvailable($query)
-    {
-        return $query->where('is_available', true);
-    }
-
-    public function scopeBusy($query)
-    {
-        return $query->where('is_available', false);
-    }
-
-    // Formatage spécial pour les numéros marocains
-    public function getFormattedPhoneNumber()
-    {
-        return preg_replace('/(\d{2})(\d{3})(\d{4})/', '+212 \1-\2-\3', $this->phoneNumber);
     }
 }

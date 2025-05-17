@@ -19,7 +19,7 @@ class MenuCategorieController extends Controller
         $categories = MenuCategorie::query()
             ->with(['restaurant', 'plats'])
             ->withCount('plats')
-            ->filter(request()->only('search', 'restaurant_id'))
+            ->filter(request()->only('search', 'restaurant_id'))  // <-- utilise le scope filter
             ->orderBy('name')
             ->paginate(10)
             ->withQueryString();
@@ -96,7 +96,7 @@ class MenuCategorieController extends Controller
     {
         abort_if(Gate::denies('delete-categorie'), 403);
 
-        if($menuCategorie->plats()->exists()) {
+        if ($menuCategorie->plats()->exists()) {
             return back()->with('error', __('Cannot delete category with active dishes'));
         }
 

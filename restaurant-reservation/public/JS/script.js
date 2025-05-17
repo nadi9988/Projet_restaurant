@@ -69,24 +69,24 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Navigation dans le sidebar
             const navLinks = document.querySelectorAll('.nav-link');
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Retirer la classe active de tous les liens
+                    // Supprime e.preventDefault() pour permettre la navigation normale
+                    // e.preventDefault();
+
+                    // Tu peux garder ce code si tu fais une SPA, mais si non il sera inutile
+                    // car la page va recharger et remettre tout à zéro
                     navLinks.forEach(l => l.classList.remove('active'));
-                    
-                    // Ajouter la classe active au lien cliqué
                     this.classList.add('active');
-                    
-                    // Faire défiler jusqu'à la section correspondante
-                    const targetId = this.getAttribute('href');
-                    if (targetId && targetId !== '#') {
-                        document.querySelector(targetId).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
+
+                    // Suppression du scroll car on quitte la page
+                    // const targetId = this.getAttribute('href');
+                    // if (targetId && targetId !== '#') {
+                    //     document.querySelector(targetId).scrollIntoView({
+                    //         behavior: 'smooth'
+                    //     });
+                    // }
                 });
             });
 

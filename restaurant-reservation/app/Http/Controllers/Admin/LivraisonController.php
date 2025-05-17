@@ -18,45 +18,45 @@ class LivraisonController extends Controller
 {
     public function index()
     {
+        $filters = request()->only('status', 'livreur_id', 'date');
+
         $livraisons = Livraison::query()
             ->with(['commande.client', 'livreur'])
-            ->filter(request()->only('status', 'livreur_id', 'date'))
+            ->filter($filters)
             ->latest('review_start_time')
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.livraisons.index', [
+        return view('admin.livraison.index', [
             'livraisons' => $livraisons,
             'statuses' => LivraisonStatus::cases(),
-            'livreurs' => Livreur::actifs()->get()
+            'livreurs' => Livreur::actifs()->get()  // Utilise bien le scope actifs()
         ]);
     }
 
     public function create()
     {
-        return view('admin.livraisons.create', [
+        return view('admin.livraison.create', [
             'commandes' => Commande::disponiblePourLivraison()->get(),
-            'livreurs' => Livreur::disponible()->get()
+            'livreurs' => Livreur::disponible()->get()  // Utilise bien le scope disponible()
         ]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate($this->validationRules());
-        
+
         return DB::transaction(function () use ($validated) {
             $livraison = Livraison::create($validated);
-            
-            // Vérification explicite
+
             if ($livraison->livreur instanceof Livreur) {
                 $this->updateLivreurDisponibilite($livraison->livreur, false);
             } else {
                 abort(500, "Le livreur associé n'est pas valide.");
             }
-            
-            return redirect()->route('admin.livraisons.show', $livraison)
+
+            return redirect()->route('admin.livraison.show', $livraison)
                 ->with('success', __('Livraison planifiée avec succès'));
-        
         });
     }
 
@@ -68,19 +68,19 @@ class LivraisonController extends Controller
             'retards'
         ]);
 
-        return view('admin.livraisons.show', compact('livraison'));
+        return view('admin.livraison.show', compact('livraison'));
     }
 
     public function edit(Livraison $livraison)
     {
-        return view('admin.livraisons.edit', [
+        return view('admin.livraison.edit', [
             'livraison' => $livraison,
             'commandes' => Commande::disponiblePourLivraison()
                 ->orWhere('id', $livraison->commande_id)
                 ->get(),
             'livreurs' => Livreur::where(function($query) use ($livraison) {
                 $query->disponible()
-                    ->orWhere('id', $livraison->livreur_id);
+                      ->orWhere('id', $livraison->livreur_id);
             })->get()
         ]);
     }
@@ -88,19 +88,18 @@ class LivraisonController extends Controller
     public function update(Request $request, Livraison $livraison)
     {
         $validated = $request->validate($this->validationRules($livraison));
-    
+
         return DB::transaction(function () use ($validated, $livraison) {
             $ancienLivreur = $livraison->livreur;
             $nouveauLivreur = Livreur::findOrFail($validated['livreur_id']);
 
-            if ($ancienLivreur && $ancienLivreur->isNot($nouveauLivreur )) {
+            if ($ancienLivreur && $ancienLivreur->isNot($nouveauLivreur)) {
                 $this->updateLivreurDisponibilite($ancienLivreur, true);
-                //$this->updateLivreurDisponibilite($nouveauLivreur, false);//
             }
 
             $livraison->update($validated);
-    
-            return redirect()->route('admin.livraisons.show', $livraison)
+
+            return redirect()->route('admin.livraison.show', $livraison)
                 ->with('success', __('Livraison mise à jour avec succès'));
         });
     }
@@ -113,10 +112,10 @@ class LivraisonController extends Controller
             if ($livraison->livreur) {
                 $this->updateLivreurDisponibilite($livraison->livreur, true);
             }
-            
+
             $livraison->delete();
 
-            return redirect()->route('admin.livraisons.index')
+            return redirect()->route('admin.livraison.index')
                 ->with('success', __('Livraison annulée avec succès'));
         });
     }
@@ -150,7 +149,7 @@ class LivraisonController extends Controller
     private function updateLivreurDisponibilite(Livreur $livreur, bool $disponible): void
     {
         $statut = $disponible ? StatutLivreur::DISPONIBLE : StatutLivreur::OCCUPE;
-        
+
         $livreur->update([
             'statut' => $statut->value,
             'disponible_jusqu' => $disponible ? null : Carbon::now()->addHours(8)

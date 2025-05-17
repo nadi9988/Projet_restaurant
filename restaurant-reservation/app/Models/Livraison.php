@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 class Livraison extends Model
 {
@@ -142,4 +143,18 @@ class Livraison extends Model
             'estimated_arrival_time' => now()
         ]);
     }
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return $query
+            ->when($filters['status'] ?? null, fn($q, $status) =>
+                $q->where('status', $status)
+            )
+            ->when($filters['livreur_id'] ?? null, fn($q, $livreurId) =>
+                $q->where('livreur_id', $livreurId)
+            )
+            ->when($filters['date'] ?? null, fn($q, $date) =>
+                $q->whereDate('review_start_time', $date)
+            );
+    }
+
 }

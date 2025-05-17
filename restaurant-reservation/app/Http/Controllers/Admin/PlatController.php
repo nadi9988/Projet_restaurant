@@ -26,7 +26,7 @@ class PlatController extends Controller
 
         $categories = MenuCategorie::pluck('name', 'id');
 
-        return view('admin.plats.index', compact('plats', 'categories'));
+        return view('admin.plat.index', compact('plats', 'categories'));
     }
 
     /**
@@ -34,7 +34,7 @@ class PlatController extends Controller
      */
     public function create()
     {
-        return view('admin.plats.create', [
+        return view('admin.plat.create', [
             'categories' => MenuCategorie::with('restaurant')->active()->get()
         ]);
     }
@@ -53,7 +53,7 @@ class PlatController extends Controller
 
         $plat = Plat::create($validated);
 
-        return redirect()->route('admin.plats.show', $plat)
+        return redirect()->route('admin.plat.show', $plat)
             ->with('success', 'Plat créé avec succès');
     }
 
@@ -67,7 +67,7 @@ class PlatController extends Controller
             'commandes' => fn($q) => $q->latest()->limit(5)
         ]);
 
-        return view('admin.plats.show', compact('plat'));
+        return view('admin.plat.show', compact('plat'));
     }
 
     /**
@@ -75,7 +75,7 @@ class PlatController extends Controller
      */
     public function edit(Plat $plat)
     {
-        return view('admin.plats.edit', [
+        return view('admin.plat.edit', [
             'plat' => $plat,
             'categories' => MenuCategorie::with('restaurant')->active()->get()
         ]);
@@ -94,14 +94,14 @@ class PlatController extends Controller
             if ($plat->image) {
                 Storage::disk('public')->delete($plat->image);
             }
-            $validated['image'] = $request->file('image')->store('plats', 'public');
+            $validated['image'] = $request->file('image')->store('plat', 'public');
         } else {
             unset($validated['image']);
         }
 
         $plat->update($validated);
 
-        return redirect()->route('admin.plats.show', $plat)
+        return redirect()->route('admin.plat.show', $plat)
             ->with('success', 'Plat mis à jour avec succès');
     }
 
@@ -122,7 +122,7 @@ class PlatController extends Controller
 
         $plat->delete();
 
-        return redirect()->route('admin.plats.index')
+        return redirect()->route('admin.plat.index')
             ->with('success', 'Plat supprimé avec succès');
     }
 

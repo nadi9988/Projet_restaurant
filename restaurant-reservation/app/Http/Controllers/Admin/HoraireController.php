@@ -16,13 +16,13 @@ class HoraireController extends Controller
             ->orderBy('restaurant_id')
             ->paginate(10);
 
-        return view('admin.horaires.index', compact('horaires'));
+        return view('admin.horaire.index', compact('horaires'));
     }
 
     public function create()
     {
         $restaurants = Restaurant::doesntHave('horaire')->get();
-        return view('admin.horaires.create', compact('restaurants'));
+        return view('admin.horaire.create', compact('restaurants'));
     }
 
     public function store(Request $request)
@@ -41,13 +41,13 @@ class HoraireController extends Controller
         
         Horaire::create($validated);
 
-        return redirect()->route('admin.horaires.index')
+        return redirect()->route('admin.horaire.index')
             ->with('success', 'Horaire enregistré avec succès');
     }
 
     public function edit(Horaire $horaire)
     {
-        return view('admin.horaires.edit', compact('horaire'));
+        return view('admin.horaire.edit', compact('horaire'));
     }
 
     public function update(Request $request, Horaire $horaire)
@@ -60,14 +60,14 @@ class HoraireController extends Controller
         $validated['opening_time'] = $this->formatSchedule($validated['opening_time']);
         $horaire->update($validated);
 
-        return redirect()->route('admin.horaires.index')
+        return redirect()->route('admin.horaire.index')
             ->with('success', 'Horaire mis à jour avec succès');
     }
 
     public function destroy(Horaire $horaire)
     {
         $horaire->delete();
-        return redirect()->route('admin.horaires.index')
+        return redirect()->route('admin.horaire.index')
             ->with('success', 'Horaire supprimé avec succès');
     }
 

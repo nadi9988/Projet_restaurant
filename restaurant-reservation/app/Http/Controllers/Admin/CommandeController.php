@@ -27,28 +27,22 @@ class CommandeController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.commandes.index', [
+        return view('admin.commande.index', [
             'commandes' => $commandes,
             'statuses' => CommandeStatus::cases(),
             'restaurants' => Restaurant::pluck('name', 'id')
         ]);
     }
 
-    /**
-     * Affiche le formulaire de création
-     */
     public function create()
     {
-        return view('admin.commandes.create', [
+        return view('admin.commande.create', [
             'clients' => Client::active()->get(),
             'reservations' => Reservation::disponible()->get(),
             'modes_paiement' => PaymentMode::cases()
         ]);
     }
 
-    /**
-     * Enregistre une nouvelle commande
-     */
     public function store(Request $request)
     {
         $validated = $request->validate($this->validationRules());
@@ -56,13 +50,10 @@ class CommandeController extends Controller
         $commande = Commande::create($validated);
         $this->updateCommandeStatus($commande);
 
-        return redirect()->route('admin.commandes.show', $commande)
+        return redirect()->route('admin.commande.show', $commande)
             ->with('success', __('Commande créée avec succès'));
     }
 
-    /**
-     * Affiche les détails de la commande
-     */
     public function show(Commande $commande)
     {
         $commande->load([
@@ -72,15 +63,12 @@ class CommandeController extends Controller
             'reservation.table.restaurant'
         ]);
 
-        return view('admin.commandes.show', compact('commande'));
+        return view('admin.commande.show', compact('commande'));
     }
 
-    /**
-     * Affiche le formulaire d'édition
-     */
     public function edit(Commande $commande)
     {
-        return view('admin.commandes.edit', [
+        return view('admin.commande.edit', [
             'commande' => $commande,
             'clients' => Client::active()->get(),
             'reservations' => Reservation::disponible()->orWhere('id', $commande->reservation_id)->get(),
@@ -88,9 +76,6 @@ class CommandeController extends Controller
         ]);
     }
 
-    /**
-     * Met à jour la commande
-     */
     public function update(Request $request, Commande $commande)
     {
         $validated = $request->validate($this->validationRules($commande));
@@ -98,20 +83,17 @@ class CommandeController extends Controller
         $commande->update($validated);
         $this->updateCommandeStatus($commande, true);
 
-        return redirect()->route('admin.commandes.show', $commande)
+        return redirect()->route('admin.commande.show', $commande)
             ->with('success', __('Commande mise à jour avec succès'));
     }
 
-    /**
-     * Supprime la commande
-     */
     public function destroy(Commande $commande)
     {
         abort_if(Gate::denies('delete-commandes'), 403);
 
-        if($commande->canBeDeleted()) {
+        if ($commande->canBeDeleted()) {
             $commande->deleteWithRelations();
-            return redirect()->route('admin.commandes.index')
+            return redirect()->route('admin.commande.index')
                 ->with('success', __('Commande archivée avec succès'));
         }
 
@@ -119,9 +101,6 @@ class CommandeController extends Controller
             ->with('error', __('Impossible de supprimer cette commande'));
     }
 
-    /**
-     * Règles de validation
-     */
     protected function validationRules(?Commande $commande = null): array
     {
         return [
@@ -141,16 +120,13 @@ class CommandeController extends Controller
         ];
     }
 
-    /**
-     * Gestion du statut de la commande
-     */
     private function updateCommandeStatus(Commande $commande, bool $isUpdate = false): void
     {
-        if($commande->reservation_id && !$isUpdate) {
+        if ($commande->reservation_id && !$isUpdate) {
             $commande->update(['status' => CommandeStatus::EN_ATTENTE]);
         }
 
-        if($commande->wasChanged('status')) {
+        if ($commande->wasChanged('status')) {
             $commande->notifyStatusChange();
         }
     }

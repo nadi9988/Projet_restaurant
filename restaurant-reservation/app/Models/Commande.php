@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use NumberFormatter;
 use Carbon\Carbon;
-use Illuminate\Support\Str; // <-- Ajoutez cette ligne
-
+use Illuminate\Support\Str;
 
 class Commande extends Model
 {
@@ -74,7 +73,7 @@ class Commande extends Model
 
     public function getDeliveryAddressFormattedAttribute(): string
     {
-        if(!$this->is_delivery) return 'Retrait sur place';
+        if (!$this->is_delivery) return 'Retrait sur place';
         return $this->delivery_address ? "📍 " . Str::title($this->delivery_address) : 'Adresse non spécifiée';
     }
 
@@ -87,7 +86,7 @@ class Commande extends Model
     // Méthodes métier
     public function recalculateTotal(): float
     {
-        $total = $this->lignesCommande->sum(fn($ligne) => 
+        $total = $this->lignesCommande->sum(fn($ligne) =>
             $ligne->quantity * $ligne->price
         );
 
@@ -102,16 +101,16 @@ class Commande extends Model
 
     public function updateStatus(CommandeStatus $newStatus): bool
     {
-        if($this->status->canTransitionTo($newStatus)) {
+        if ($this->status->canTransitionTo($newStatus)) {
             $this->update(['status' => $newStatus]);
-            
-            if($newStatus === CommandeStatus::LIVREE) {
+
+            if ($newStatus === CommandeStatus::LIVREE) {
                 $this->livraison?->markAsDelivered();
             }
-            
+
             return true;
         }
-        
+
         return false;
     }
 
@@ -137,6 +136,26 @@ class Commande extends Model
     public function scopeWithPaymentMode($query, PaymentMode $mode)
     {
         return $query->where('payment_mode', $mode);
+    }
+
+    // Scope pour le filtrage dynamique
+    public function scopeFilter($query, array $filters)
+    {
+        if (!empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (!empty($filters['restaurant_id'])) {
+            $query->whereHas('reservation.table.restaurant', function ($q) use ($filters) {
+                $q->where('id', $filters['restaurant_id']);
+            });
+        }
+
+        if (!empty($filters['date'])) {
+            $query->whereDate('date_time', $filters['date']);
+        }
+
+        return $query;
     }
 
     // Validation

@@ -10,10 +10,6 @@ use App\Http\Controllers\Controller;
 
 class LivreurController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Livreur::class, 'livreur'); // <─ Autorisation via Policy
-    }
 
     public function index()
     {
@@ -21,12 +17,12 @@ class LivreurController extends Controller
             ->orderBy('lastName')
             ->paginate(10);
 
-        return view('admin.livreurs.index', compact('livreurs')); // <─ Chemin admin
+        return view('admin.livreur.index', compact('livreurs')); // <─ Chemin admin
     }
 
     public function create()
     {
-        return view('admin.livreurs.create'); // <─ Chemin admin
+        return view('admin.livreur.create'); // <─ Chemin admin
     }
 
     public function store(Request $request)
@@ -45,7 +41,7 @@ class LivreurController extends Controller
 
         Livreur::create($validated);
 
-        return redirect()->route('admin.livreurs.index') // <─ Route admin
+        return redirect()->route('admin.livreur.index') // <─ Route admin
             ->with('success', 'Livreur ajouté avec succès');
     }
 
@@ -57,7 +53,7 @@ class LivreurController extends Controller
 
     public function edit(Livreur $livreur)
     {
-        return view('admin.livreurs.edit', compact('livreur')); // <─ Chemin admin
+        return view('admin.livreur.edit', compact('livreur')); // <─ Chemin admin
     }
 
     public function update(Request $request, Livreur $livreur)
@@ -76,7 +72,7 @@ class LivreurController extends Controller
 
         $livreur->update($validated);
 
-        return redirect()->route('admin.livreurs.index') // <─ Route admin
+        return redirect()->route('admin.livreur.index') // <─ Route admin
             ->with('success', 'Livreur mis à jour avec succès');
     }
 
@@ -87,7 +83,7 @@ class LivreurController extends Controller
 
         $livreur->delete();
 
-        return redirect()->route('admin.livreurs.index') // <─ Route admin
+        return redirect()->route('admin.livreur.index') // <─ Route admin
             ->with('success', 'Livreur supprimé avec succès');
     }
 }

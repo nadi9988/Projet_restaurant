@@ -27,7 +27,7 @@ class TableController extends Controller
 
         $restaurants = Restaurant::active()->pluck('name', 'id');
 
-        return view('admin.tables.index', compact('tables', 'restaurants'));
+        return view('admin.table.index', compact('tables', 'restaurants'));
     }
 
     /**
@@ -35,7 +35,7 @@ class TableController extends Controller
      */
     public function create()
     {
-        return view('admin.tables.create', [
+        return view('admin.table.create', [
             'restaurants' => Restaurant::active()->get(),
             'locations' => config('tables.locations')
         ]);
@@ -50,7 +50,7 @@ class TableController extends Controller
 
         Table::create($validated + ['qr_code' => $this->generateQrCode()]);
 
-        return redirect()->route('admin.tables.index')
+        return redirect()->route('admin.table.index')
             ->with('success', __('Table created successfully'));
     }
 
@@ -64,7 +64,7 @@ class TableController extends Controller
             'restaurant'
         ]);
 
-        return view('admin.tables.show', compact('table'));
+        return view('admin.table.show', compact('table'));
     }
 
     /**
@@ -72,7 +72,7 @@ class TableController extends Controller
      */
     public function edit(Table $table)
     {
-        return view('admin.tables.edit', [
+        return view('admin.table.edit', [
             'table' => $table,
             'restaurants' => Restaurant::active()->get(),
             'locations' => config('tables.locations')
@@ -88,7 +88,7 @@ class TableController extends Controller
 
         $table->update($validated);
 
-        return redirect()->route('admin.tables.show', $table)
+        return redirect()->route('admin.table.show', $table)
             ->with('success', __('Table updated successfully'));
     }
 
@@ -106,7 +106,7 @@ class TableController extends Controller
         Storage::disk('public')->delete($table->qr_code);
         $table->delete();
 
-        return redirect()->route('admin.tables.index')
+        return redirect()->route('admin.table.index')
             ->with('success', __('Table deleted successfully'));
     }
 
