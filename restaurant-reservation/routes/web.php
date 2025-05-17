@@ -21,20 +21,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/logout', 'logout')->name('logout');
 });
-
-
-
-
-
-Route::get('/', function () {
-    return view('layouts.layout');
-})->name('dashboard');
-
-Route::resource('restaurants', 'RestaurantController');
-Route::resource('categories', 'CategoryController');
-// Ajoutez d'autres routes ici
-
-
 //Routes admin
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/Admin', function () {

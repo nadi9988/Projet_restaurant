@@ -1,6 +1,4 @@
-@extends('admin.admin')
 
-@section('content')
 <div class="sidebar">
     <div class="logo">
         <i class="fas fa-utensils"></i>
@@ -67,4 +65,3 @@
 
     </ul>
 </div>
-@endsection

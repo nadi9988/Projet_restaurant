@@ -1,7 +1,4 @@
-<!-- Modals -->
-    <!-- Modal Ajout/Modification Catégorie -->
-@extends('admin.admin')
-@section('content')
+
 <div id="restaurant-modal" class="modal">
         <div class="modal-content">
         <span class="close">&times;</span>
@@ -177,4 +174,4 @@
         </form>
     </div>
 </div>
-@endsection
+
