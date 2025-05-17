@@ -95,7 +95,7 @@ class LivraisonController extends Controller
 
             if ($ancienLivreur && $ancienLivreur->isNot($nouveauLivreur )) {
                 $this->updateLivreurDisponibilite($ancienLivreur, true);
-                $this->updateLivreurDisponibilite($nouveauLivreur, false);
+                //$this->updateLivreurDisponibilite($nouveauLivreur, false);//
             }
 
             $livraison->update($validated);

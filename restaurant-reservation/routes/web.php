@@ -1,9 +1,6 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController; 
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\RestaurantController;
@@ -12,13 +9,12 @@ use App\Http\Controllers\Admin\PlatController;
 use App\Http\Controllers\Admin\HoraireController;
 use App\Http\Controllers\Admin\TableController;
 use App\Http\Controllers\Admin\CommandeController;
+use App\Http\Controllers\Admin\PaiementController;
 use App\Http\Controllers\Admin\LivraisonController;
 use App\Http\Controllers\Admin\LivreurController;
 
-
-
 // Authentification
-Route::controller(AuthController::class)->group(function() {
+Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
     Route::get('/register', 'showRegistrationForm')->name('register');
@@ -27,7 +23,30 @@ Route::controller(AuthController::class)->group(function() {
 });
 
 
-/* Admin routes */
-Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
-Route::get('/admin/restaurant', [App\Http\Controllers\AdminController::class, 'restaurant'])->name('restaurant.index');
-Route::delete('/admin/restaurant/{id}', [App\Http\Controllers\AdminController::class, 'deleteLaureat'])->name('delete.restaurant');
+
+
+
+Route::get('/', function () {
+    return view('layouts.layout');
+})->name('dashboard');
+
+Route::resource('restaurants', 'RestaurantController');
+Route::resource('categories', 'CategoryController');
+// Ajoutez d'autres routes ici
+
+
+//Routes admin
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/Admin', function () {
+        return view('admin.admin');
+    })->name('dashboard');
+    Route::resource('/restaurants', RestaurantController::class);
+    Route::resource('/menu-categories', MenuCategorieController::class);
+    Route::resource('/plat', PlatController::class);
+    Route::resource('/horaire', HoraireController::class);
+    Route::resource('/table', TableController::class);
+    Route::resource('/commande', CommandeController::class);
+    Route::resource('/livraison', LivraisonController::class);
+    Route::resource('/livreur', LivreurController::class);
+
+});

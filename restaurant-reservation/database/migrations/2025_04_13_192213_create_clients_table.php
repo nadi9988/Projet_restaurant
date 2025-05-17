@@ -11,12 +11,14 @@ return new class extends Migration
      */ 
     public function up(): void
     {
-        Schema::create('client', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+       Schema::create('clients', function (Blueprint $table) {
+            $table->id(); // clé primaire
+          $table->foreignId('user_id')->constrained('users');
             $table->integer('points_fidelite')->default(0);
             $table->timestamps();
-        });
+});
+
+
     }
 
     /**
