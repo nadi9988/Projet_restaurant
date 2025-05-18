@@ -25,7 +25,7 @@ class TableController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $restaurants = Restaurant::active()->pluck('name', 'id');
+        $restaurants = Restaurant::active()->pluck('nom', 'id');
 
         return view('admin.table.index', compact('tables', 'restaurants'));
     }

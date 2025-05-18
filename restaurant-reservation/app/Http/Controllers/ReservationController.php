@@ -21,7 +21,7 @@ class ReservationController extends Controller
             ->orderBy('date_time', 'desc')
             ->paginate(10);
 
-        return view('reservations.index', compact('reservations'));
+        return view('Reservation', compact('reservations'));
     }
 
     /**
@@ -33,7 +33,7 @@ class ReservationController extends Controller
         $restaurants = Restaurant::all();
         $tables = Table::where('available', true)->get();
 
-        return view('reservations.create', compact('clients', 'restaurants', 'tables'));
+        return view('Reservation.create', compact('clients', 'restaurants', 'tables'));
     }
 
     /**
@@ -77,7 +77,7 @@ class ReservationController extends Controller
 
         Reservation::create($validated);
 
-        return redirect()->route('reservations.index')
+        return redirect()->route('Reservation')
             ->with('success', 'Réservation créée avec succès');
     }
 
@@ -87,7 +87,7 @@ class ReservationController extends Controller
     public function show(Reservation $reservation)
     {
         $reservation->load(['client', 'restaurant', 'table', 'commande']);
-        return view('reservations.show', compact('reservation'));
+        return view('Reservation.show', compact('reservation'));
     }
 
     /**
@@ -99,7 +99,7 @@ class ReservationController extends Controller
         $restaurants = Restaurant::all();
         $tables = Table::where('available', true)->get();
 
-        return view('reservations.edit', compact('reservation', 'clients', 'restaurants', 'tables'));
+        return view('reservation.edit', compact('reservation', 'clients', 'restaurants', 'tables'));
     }
 
     /**
@@ -146,7 +146,7 @@ class ReservationController extends Controller
 
         $reservation->update($validated);
 
-        return redirect()->route('reservations.index')
+        return redirect()->route('Reservation')
             ->with('success', 'Réservation mise à jour avec succès');
     }
 
@@ -156,7 +156,7 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         $reservation->delete();
-        return redirect()->route('reservations.index')
+        return redirect()->route('Reservation')
             ->with('success', 'Réservation supprimée avec succès');
     }
 }

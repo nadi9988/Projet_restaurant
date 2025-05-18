@@ -6,6 +6,9 @@
     <title>Admin - RestoReserve</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+     <!-- CSRF Token pour les requêtes AJAX -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <!-- Sidebar Navigation -->

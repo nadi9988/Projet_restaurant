@@ -24,7 +24,7 @@ class MenuCategorieController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $restaurants = Restaurant::pluck('name', 'id');
+        $restaurants = Restaurant::pluck('nom', 'id');
 
         return view('admin.menu-categories.index', compact('categories', 'restaurants'));
     }
@@ -49,7 +49,7 @@ class MenuCategorieController extends Controller
         $categorie = MenuCategorie::create($validated);
 
         return redirect()->route('admin.menu-categories.show', $categorie)
-            ->with('success', __('Category created successfully'));
+            ->with('success', __('Catégorie créée avec succès'));
     }
 
     /**

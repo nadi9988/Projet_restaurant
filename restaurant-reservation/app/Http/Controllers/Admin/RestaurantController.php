@@ -39,22 +39,31 @@ class RestaurantController extends Controller
             'nom' => 'required|string|max:255',
             'adresse' => 'required|string|max:255',
             'telephone' => 'required|string|max:20',
-            'email' => 'required|email|unique:restaurants,email',
+            'email' => 'nullable|email',
             'description' => 'nullable|string',
-            'image' => 'required|image|max:2048',
-            'statut' => 'required|in:actif,inactif'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'statut' => 'required|in:actif,inactif',
         ]);
 
-        // Gestion de l'upload de l'image
+        $restaurant = new Restaurant();
+        $restaurant->nom = $validated['nom'];
+        $restaurant->adresse = $validated['adresse'];
+        $restaurant->telephone = $validated['telephone'];
+        $restaurant->email = $validated['email'] ?? null;
+        $restaurant->description = $validated['description'] ?? null;
+        $restaurant->is_active = $validated['statut'] === 'actif';
+
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('restaurants', 'public');
+            $imagePath = $request->file('image')->store('restaurants', 'public');
+            $restaurant->image = $imagePath;
         }
 
-        Restaurant::create($validated);
+        $restaurant->save();
 
-        return redirect()->route('admin.restaurants.index')
-            ->with('success', 'Restaurant créé avec succès');
+        return redirect()->route('admin.restaurants.index')->with('success', 'Restaurant ajouté avec succès.');
     }
+
+
 
     /**
      * Affiche les détails complets d'un restaurant (admin)

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CommandeController;
 use App\Http\Controllers\Admin\PaiementController;
 use App\Http\Controllers\Admin\LivraisonController;
 use App\Http\Controllers\Admin\LivreurController;
+use App\Http\Controllers\ReservationController;
 
 // Authentification
 Route::controller(AuthController::class)->group(function () {
@@ -35,4 +36,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('/livraison', LivraisonController::class);
     Route::resource('/livreur', LivreurController::class);
 
+});
+
+//Route Reservation
+    Route::get('/reservations', [ReservationController::class, 'index'])->name('Reservation');
+
+
+
+
+Route::get('/Accueil', function () {
+    return view ('Accueil');
+});
+
+Route::get('/Restaurant', function () {
+    return view ('Restaurant');
 });

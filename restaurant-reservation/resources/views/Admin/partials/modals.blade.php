@@ -1,40 +1,64 @@
 
 <div id="restaurant-modal" class="modal">
-        <div class="modal-content">
+    <div class="modal-content">
         <span class="close">&times;</span>
         <h3 class="modal-title">
             <i class="fas fa-store"></i>
                 Nouveau Restaurant
         </h3>
-    
-        <form id="restaurant-form">
+        <form id="restaurant-form" action="{{ route('admin.restaurants.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
             <div class="form-group">
-                <label>Nom du restaurant</label>
-                <input type="text" required>
+                <label for="nom">Nom du restaurant</label>
+                <input type="text" name="nom" id="nom" class="form-control" required value="{{ old('nom') }}">
+                @error('nom') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-        
+
             <div class="form-row">
-                <div class="form-group">
-                    <label>Adresse</label>
-                    <input type="text" required>
+                <div class="form-group col-md-6">
+                    <label for="adresse">Adresse</label>
+                    <input type="text" name="adresse" id="adresse" class="form-control" required value="{{ old('adresse') }}">
+                    @error('adresse') <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
-                <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" required>
+                <div class="form-group col-md-6">
+                    <label for="telephone">Téléphone</label>
+                    <input type="tel" name="telephone" id="telephone" class="form-control" required value="{{ old('telephone') }}">
+                    @error('telephone') <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
             </div>
-        
+
             <div class="form-group">
-                <label>Description</label>
-                <textarea rows="3"></textarea>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}">
+                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-        
+
             <div class="form-group">
-                <label>Galerie photos</label>
-                <input type="file" multiple accept="image/*">
-                <div class="gallery-grid" id="gallery-preview"></div>
-             </div>
-        
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="3" class="form-control">{{ old('description') }}</textarea>
+                @error('description') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image du restaurant</label>
+                <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
+                @error('image') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+
+            <div class="form-group">
+                <label>Statut</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="statut" id="statut_actif" value="actif" {{ old('statut', 'actif') == 'actif' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="statut_actif">Actif</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="statut" id="statut_inactif" value="inactif" {{ old('statut') == 'inactif' ? 'checked' : '' }}>
+                    <label class="form-check-label" for="statut_inactif">Inactif</label>
+                </div>
+                @error('statut') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Enregistrer
             </button>
@@ -96,7 +120,7 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="plat-price">Prix (€)</label>
+                    <label for="plat-price">Prix (MAD)</label>
                     <input type="number" id="plat-price" min="0" step="0.01" required>
                 </div>
                 

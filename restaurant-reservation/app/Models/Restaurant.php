@@ -10,11 +10,13 @@ use Illuminate\Support\Collection;
 class Restaurant extends Model
 {
     protected $fillable = [
-        'nom',
-        'adresse',
-        'telephone',
-        'email',
-        'description',
+    'nom',
+    'adresse',
+    'telephone',
+    'email',
+    'description',
+    'image',
+    'is_active',
     ];
 
     // Relations

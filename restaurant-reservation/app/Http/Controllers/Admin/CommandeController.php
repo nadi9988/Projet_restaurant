@@ -30,7 +30,7 @@ class CommandeController extends Controller
         return view('admin.commande.index', [
             'commandes' => $commandes,
             'statuses' => CommandeStatus::cases(),
-            'restaurants' => Restaurant::pluck('name', 'id')
+            'restaurants' => Restaurant::pluck('nom', 'id')
         ]);
     }
 
