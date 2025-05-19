@@ -9,20 +9,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class MenuCategorieController extends Controller
+class MenuCategoriesController extends Controller
 {
     /**
      * Affiche la liste des catégories avec recherche et tri
      */
     public function index()
     {
-        $categories = MenuCategorie::query()
-            ->with(['restaurant', 'plats'])
-            ->withCount('plats')
-            ->filter(request()->only('search', 'restaurant_id'))  // <-- utilise le scope filter
-            ->orderBy('name')
-            ->paginate(10)
-            ->withQueryString();
+    $categories = MenuCategorie::query()
+        ->with(['restaurant', 'plats'])
+        ->withCount('plats')
+        ->filter(request()->only('search', 'restaurant_id')) // si filtre actif
+        ->orderBy('nom')
+        ->paginate(10)
+        ->withQueryString();
 
         $restaurants = Restaurant::pluck('nom', 'id');
 
@@ -40,7 +40,7 @@ class MenuCategorieController extends Controller
     }
 
     /**
-     * Enregistre une nouvelle catégorie avec gestion d'image
+     * Enregistre une nouvelle catégorie
      */
     public function store(Request $request)
     {
@@ -48,7 +48,7 @@ class MenuCategorieController extends Controller
 
         $categorie = MenuCategorie::create($validated);
 
-        return redirect()->route('admin.menu-categories.show', $categorie)
+        return redirect()->route('admin.menu-categories.index', $categorie)
             ->with('success', __('Catégorie créée avec succès'));
     }
 
@@ -66,7 +66,7 @@ class MenuCategorieController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'édition avec historique
+     * Affiche le formulaire d'édition
      */
     public function edit(MenuCategorie $menuCategorie)
     {
@@ -77,7 +77,7 @@ class MenuCategorieController extends Controller
     }
 
     /**
-     * Met à jour la catégorie avec audit
+     * Met à jour la catégorie
      */
     public function update(Request $request, MenuCategorie $menuCategorie)
     {
@@ -86,24 +86,24 @@ class MenuCategorieController extends Controller
         $menuCategorie->update($validated);
 
         return redirect()->route('admin.menu-categories.show', $menuCategorie)
-            ->with('success', __('Category updated successfully'));
+            ->with('success', __('Catégorie mise à jour avec succès'));
     }
 
     /**
-     * Suppression sécurisée avec archivage
+     * Supprime une catégorie après vérifications
      */
     public function destroy(MenuCategorie $menuCategorie)
     {
         abort_if(Gate::denies('delete-categorie'), 403);
 
         if ($menuCategorie->plats()->exists()) {
-            return back()->with('error', __('Cannot delete category with active dishes'));
+            return back()->with('error', __('Impossible de supprimer une catégorie contenant des plats actifs.'));
         }
 
         $menuCategorie->delete();
 
         return redirect()->route('admin.menu-categories.index')
-            ->with('success', __('Category archived successfully'));
+            ->with('success', __('Catégorie supprimée avec succès'));
     }
 
     /**
@@ -113,7 +113,7 @@ class MenuCategorieController extends Controller
     {
         return [
             'restaurant_id' => 'required|exists:restaurants,id',
-            'name' => [
+            'nom' => [
                 'required',
                 'string',
                 'max:255',

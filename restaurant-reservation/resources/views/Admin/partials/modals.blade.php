@@ -73,17 +73,36 @@
             Nouvelle Catégorie
         </h3>
         
-        <form>
+        <form id="category-form" action="{{ route('admin.menu-categories.store') }}" method="POST">
+            @csrf
+
             <div class="form-group">
                 <label for="category-name">Nom de la catégorie</label>
-                <input type="text" id="category-name" placeholder="Ex: Entrées, Desserts..." required>
+                <input type="text" id="category-name" name="nom" class="form-control" placeholder="Ex: Entrées, Desserts..." required value="{{ old('name') }}">
+                @error('nom') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-            
+
             <div class="form-group">
                 <label for="category-description">Description</label>
-                <textarea id="category-description" rows="3" placeholder="Décrivez cette catégorie..."></textarea>
+                <textarea id="category-description" name="description" class="form-control" rows="3" placeholder="Décrivez cette catégorie...">{{ old('description') }}</textarea>
+                @error('description') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-            
+
+            <div class="form-group">
+                <label for="restaurant_id">Restaurant</label>
+                <select id="restaurant_id" name="restaurant_id" class="form-control" required>
+                    <option value="">Sélectionner un restaurant</option>
+                        @if(isset($restaurants) && count($restaurants))
+                            @foreach ($restaurants as $id => $nom)
+                                <option value="{{ $id }}" {{ old('restaurant_id') == $id ? 'selected' : '' }}>{{ $nom }}</option>
+                            @endforeach
+                        @else
+                            <option value="">Aucun restaurant disponible</option>
+@endif
+                </select>
+                @error('restaurant_id') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+
             <button type="submit" class="btn btn-primary" style="width: 100%;">
                 <i class="fas fa-save"></i> Enregistrer
             </button>
@@ -100,16 +119,17 @@
             Nouveau Plat
         </h3>
         
-        <form>
+        <form method="POST" action="{{ route('admin.plat.store') }}" enctype="multipart/form-data">
+            @csrf
             <div class="form-row">
                 <div class="form-group">
                     <label for="plat-name">Nom du plat</label>
-                    <input type="text" id="plat-name" placeholder="Ex: Salade César..." required>
+                    <input type="text" id="plat-name" name="nom" placeholder="Ex: Salade César..." required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="plat-category">Catégorie</label>
-                    <select id="plat-category" required>
+                    <select id="plat-category" name="menu_categories_id" required>
                         <option value="">Sélectionnez...</option>
                         <option value="1">Entrées</option>
                         <option value="2">Plats principaux</option>
@@ -117,37 +137,38 @@
                     </select>
                 </div>
             </div>
-            
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="plat-price">Prix (MAD)</label>
-                    <input type="number" id="plat-price" min="0" step="0.01" required>
+                    <input type="number" id="plat-price" name="prix" min="0" step="0.01" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="plat-status">Statut</label>
-                    <select id="plat-status">
+                    <select id="plat-status" name="disponible" required>
                         <option value="1">Disponible</option>
                         <option value="0">Indisponible</option>
                     </select>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="plat-description">Description</label>
-                <textarea id="plat-description" rows="3" placeholder="Ingrédients, particularités..."></textarea>
+                <textarea id="plat-description" name="description" rows="3" placeholder="Ingrédients, particularités..."></textarea>
             </div>
-            
+
             <div class="form-group">
                 <label for="plat-image">Image</label>
-                <input type="file" id="plat-image" accept="image/*">
+                <input type="file" id="plat-image" name="image" accept="image/*">
                 <img id="plat-image-preview" src="#" alt="Aperçu de l'image" style="max-width: 200px; margin-top: 10px; display: none;">
             </div>
-            
+
             <button type="submit" class="btn btn-primary" style="width: 100%;">
                 <i class="fas fa-save"></i> Enregistrer
             </button>
         </form>
+
     </div>
 </div>
 <!-- Modal Ajout Exception Horaire -->

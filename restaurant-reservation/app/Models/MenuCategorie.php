@@ -2,47 +2,55 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MenuCategorie extends Model
 {
-    // Exemple : propriétés à adapter selon ton modèle
     protected $fillable = [
         'restaurant_id',
-        'name',
+        'nom',
         'description',
         'ordre_affichage',
     ];
 
-    // Relations exemple (à adapter)
-    public function restaurant()
+    /**
+     * Une catégorie a plusieurs plats.
+     *
+     * @return HasMany
+     */
+    public function plats(): HasMany
+    {
+        return $this->hasMany(Plat::class, 'menu_categories_id');
+    }
+
+    /**
+     * Une catégorie appartient à un restaurant.
+     *
+     * @return BelongsTo
+     */
+    public function restaurant(): BelongsTo
     {
         return $this->belongsTo(Restaurant::class);
     }
 
-    public function plats()
-    {
-        return $this->hasMany(Plat::class);
-    }
-
     /**
-     * Scope pour filtrer selon les critères 'search' et 'restaurant_id'
+     * Scope de filtrage par nom et restaurant.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array $filters
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
-    public function scopeFilter($query, array $filters)
+    public function scopeFilter(Builder $query, array $filters): Builder
     {
-        if (!empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where('name', 'like', "%{$search}%");
-        }
-
-        if (!empty($filters['restaurant_id'])) {
-            $query->where('restaurant_id', $filters['restaurant_id']);
-        }
-
-        return $query;
+        return $query
+            ->when(!empty($filters['search']), function ($q) use ($filters) {
+                $q->where('nom', 'like', '%' . $filters['search'] . '%');
+            })
+            ->when(!empty($filters['restaurant_id']), function ($q) use ($filters) {
+                $q->where('restaurant_id', $filters['restaurant_id']);
+            });
     }
 }

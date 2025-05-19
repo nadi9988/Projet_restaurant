@@ -15,7 +15,7 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        $restaurants = Restaurant::withCount(['tables', 'menuCategories', 'reservations'])
+        $restaurants = Restaurant::withCount(['tables', 'reservations'])
             ->latest()
             ->paginate(10);
 

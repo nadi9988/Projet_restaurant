@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->dateTime('date_time');
             $table->string('status')->default('en_preparation');
             $table->decimal('total_amount', 10, 2);

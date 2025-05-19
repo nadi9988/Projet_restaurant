@@ -7,32 +7,30 @@ use Illuminate\Support\Str;
 
 class Plat extends Model
 {
+    // Champs modifiables en masse
     protected $fillable = [
-        'menu_categorie_id',
         'nom',
+        'menu_categories_id',
+        'prix',          
+        'disponible',    
         'description',
-        'price',
         'image',
-        'available',
     ];
 
+    // Casts pour conversion automatique
     protected $casts = [
-        'price' => 'float',
-        'available' => 'boolean',
+        'prix' => 'float',
+        'disponible' => 'boolean',
     ];
 
-    // Relations
+    // Relation vers la catégorie du menu
     public function menuCategorie()
     {
-        return $this->belongsTo(MenuCategorie::class);
+        return $this->belongsTo(MenuCategorie::class, 'menu_categories_id');
     }
 
-    public function ligneCommandes()
-    {
-        return $this->hasMany(LigneCommande::class);
-    }
 
-    // Accesseurs (Getters)
+
     public function getNomAttribute($value)
     {
         return Str::title($value);
@@ -43,9 +41,9 @@ class Plat extends Model
         return Str::ucfirst($value);
     }
 
-    public function getPriceAttribute($value)
+    public function getPrixAttribute($value)
     {
-        return number_format($value, 2, ',', ' ') . ' €';
+        return number_format($value, 2, ',', ' ') . ' MAD';
     }
 
     public function getImageAttribute($value)
@@ -53,12 +51,13 @@ class Plat extends Model
         return $value ? asset('storage/images/plats/' . $value) : null;
     }
 
-    public function getAvailableAttribute($value)
+    public function getDisponibleAttribute($value)
     {
         return $value ? 'Disponible' : 'Non disponible';
     }
 
-    // Mutateurs (Setters)
+    // Mutateurs (setters) pour nettoyer les données avant insertion
+
     public function setNomAttribute($value)
     {
         $this->attributes['nom'] = trim(Str::lower($value));
@@ -69,22 +68,22 @@ class Plat extends Model
         $this->attributes['description'] = trim(Str::ucfirst($value));
     }
 
-    public function setPriceAttribute($value)
+    public function setPrixAttribute($value)
     {
-        // Nettoyer la valeur numérique
+        // Nettoyer la valeur numérique en format float
         $cleanValue = (float)preg_replace('/[^0-9,.]/', '', str_replace(',', '.', $value));
-        $this->attributes['price'] = round($cleanValue, 2);
+        $this->attributes['prix'] = round($cleanValue, 2);
     }
 
-    // Méthode supplémentaire pour vérifier la disponibilité
-    public function isAvailable()
+    // Méthode pour savoir si le plat est disponible (booléen)
+    public function isDisponible()
     {
-        return $this->available;
+        return $this->disponible;
     }
 
-    // Méthode pour formater le prix sans le symbole
-    public function getRawPrice()
+    // Méthode pour obtenir le prix brut sans formatage (ex: pour calculs)
+    public function getRawPrix()
     {
-        return number_format($this->price, 2, '.', '');
+        return number_format($this->attributes['prix'], 2, '.', '');
     }
 }

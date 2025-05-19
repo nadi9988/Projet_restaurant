@@ -42,19 +42,5 @@
                 <span>Commandes</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a href="{{ route('admin.livraison.index') }}" class="nav-link {{ request()->routeIs('admin.livraison.*') ? 'active' : '' }}">
-                <i class="fas fa-truck"></i>
-                <span>Livraisons</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('admin.livreur.index') }}" class="nav-link {{ request()->routeIs('admin.livreur.*') ? 'active' : '' }}">
-                <i class="fas fa-user-tie"></i>
-                <span>Livreurs</span>
-            </a>
-        </li>
-
     </ul>
 </div>

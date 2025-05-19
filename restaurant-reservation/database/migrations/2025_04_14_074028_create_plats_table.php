@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('plats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('menu_categorie_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->foreignId('menu_categories_id')->constrained()->onDelete('cascade');
+            $table->string('nom');
             $table->text('description')->nullable();
-            $table->decimal('price', 8, 2);
+            $table->decimal('prix', 8, 2);
             $table->string('image')->nullable();
-            $table->boolean('available')->default(true);
+            $table->boolean('disponible')->default(true);
             $table->timestamps();
+            
         });
     }
 
